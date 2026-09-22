@@ -9,6 +9,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "start:prod": "next start -H 0.0.0.0",
+    "launch": "bash scripts/start-prod.sh",
+    "smoke": "bash scripts/smoke.sh",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint"

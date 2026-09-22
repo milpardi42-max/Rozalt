@@ -12,7 +12,15 @@ npm install
 npm run dev      # http://localhost:3000 → redirects to /fa (or /en)
 npm run check    # typecheck + lint
 npm run build && npm start
+
+# production launcher (installs/builds only when needed, generates .env.local if missing)
+npm run launch   # → next start -H 0.0.0.0 -p 3000
+npm run smoke    # pre-launch smoke test: health, routing, admin login round-trip
 ```
+
+📘 **Launching / deploying / operating the site:** see [`LAUNCH.md`](./LAUNCH.md) —
+current status, admin & owner URLs, credentials location, env-var checklist,
+systemd unit, and a troubleshooting table.
 
 ## Live / Deploy
 
