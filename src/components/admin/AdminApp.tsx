@@ -46,6 +46,8 @@ import { ArtistsManager } from "@/components/admin/ArtistsManager";
 import { PortfoliosManager } from "@/components/admin/PortfoliosManager";
 import { AcademyManager } from "@/components/admin/AcademyManager";
 import { ReservationsManager } from "@/components/admin/ReservationsManager";
+import { MastersManager } from "@/components/commerce/MastersManager";
+import { FinanceManager } from "@/components/commerce/FinanceManager";
 import { useAuth, useLocale } from "@/components/providers/AppProviders";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Select, Textarea } from "@/components/ui/Input";
@@ -71,7 +73,9 @@ type Section =
   | "education"
   | "banners"
   | "seo"
-  | "announcement-bars";
+  | "announcement-bars"
+  | "masters"
+  | "finance";
 
 /* برچسب‌های فارسی بخش‌های صفحه اصلی */
 const SECTION_LABELS: Record<HomeSectionKey, string> = {
@@ -128,6 +132,13 @@ const NAV_GROUPS: NavGroup[] = [
       { id: "buyers", label: "خریداران", icon: <ShoppingBag className="h-4 w-4" /> },
       { id: "reservations", label: "رزرو رویدادها", icon: <CalendarClock className="h-4 w-4" /> },
       { id: "artists-signup", label: "هنرمندان / طراحان", icon: <Palette className="h-4 w-4" /> },
+    ],
+  },
+  {
+    label: "دیجیتال و مالی",
+    items: [
+      { id: "masters", label: "بازبینی ماسترها", icon: <FileText className="h-4 w-4" /> },
+      { id: "finance", label: "مالی و رشد", icon: <Zap className="h-4 w-4" /> },
     ],
   },
   {
@@ -512,6 +523,8 @@ export function AdminApp() {
                   onChange={(announcementBars) => update({ announcementBars })}
                 />
               )}
+              {section === "masters" && <MastersManager />}
+              {section === "finance" && <FinanceManager />}
             </div>
           )}
         </main>

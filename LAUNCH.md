@@ -126,6 +126,37 @@ WantedBy=multi-user.target
 | `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | روی سرورلس ✅ | ذخیرهٔ پایدار محتوا؛ روی Netlify الزامی است (فایل‌سیستم فقط‌خواندنی) |
 | `CLOUDINARY_*` یا `BLOB_READ_WRITE_TOKEN` | توصیه‌شده | آپلود تصویر/ویدئوی ادمین؛ در نبودشان آپلود در `public/images/uploads/` ذخیره می‌شود (فقط dev/VPS) |
 
+### متغیرهای فروش دیجیتال (Phase 1–5)
+
+همه در `.env.example` مستند شده‌اند؛ **بدون‌تنظیم هم سایت کار می‌کند** (حالت
+sandbox/graceful). برای اتصال واقعی مقدارها را ست کنید:
+
+| متغیر | لازم؟ | توضیح |
+| --- | --- | --- |
+| `ZARINPAL_MODE` | خیر | `sandbox` (پیش‌فرض) = درگاه آزمایشی قابل‌استفاده برای خرید/فروش تست؛ `real` + زیر فقط با `ZARINPAL_MERCHANT_ID` |
+| `ZARINPAL_MERCHANT_ID` | برای real | شناسه پذیرندهٔ زرین‌پال |
+| `STRIPE_SECRET_KEY` | خیر | اگر ست نشود، دکمهٔ Stripe پنهان/غیرفعال می‌ماند |
+| `STRIPE_WEBHOOK_SECRET` | برای Stripe | امضای webhook پرداخت |
+| `CLAMAV_HOST` · `CLAMAV_PORT` | خیر | بدون ClamAV از اسکن builtin (heuristics) استفاده می‌شود؛ پورت پیش‌فرض 3310 |
+| `RESEND_API_KEY` | خیر | بدون آن، ایمیل تحویل خرید در `data/outbox/` ذخیره می‌شود (همانند فعلی) |
+| `MAIL_FROM` | خیر | فرستندهٔ ایمیل |
+
+**نکات عملیاتی تجارت:**
+
+- فایل‌های مستر (master) در `data/masters/` ذخیره می‌شوند — **بیرون از `public/`**؛
+  دانلود فقط با توکن HMAC از `AUTH_SECRET` (`GET /api/download?t=`).
+- `data/commerce.json` (خریدها، پرداخت‌ها، لایسنس‌ها، کپی‌رایت هنرمندان) و
+  `data/outbox/` در `.gitignore` هستند — روی سرور حتماً از volume/backup پشتیبان
+  بگیرید (یا مهاجرت به Redis).
+- rate-limit نرخ `checkout`/`download` از policy `default` است (۸ تلاش در ۱۵ دقیقه
+  به ازای هر IP)؛ در حالت test موازی ممکن است `too_many_attempts` ببینید —
+  ری‌استارت سرور bucketهای در حافظه را پاک می‌کند.
+- E2E فروش دیجیتال: `bash scripts/e2e-commerce.sh` (نیاز به سرور روی :3000 و
+  `.env.local`). انتظار: همه PASS.
+- زرین‌پال sandbox: صفحهٔ صندوق در `/{locale}/pay/{authority}`؛ callback با
+  `Authority+Status+sig` (HMAC). امضای نامعتبر → `error=payment_failed` و
+  **بدون fulfil**.
+
 ### Netlify / Vercel
 1. مخزن را import کنید — `netlify.toml` و `vercel.json` همه‌چیز را تنظیم کرده‌اند.
 2. متغیرهای بالا را در Environment Variables اضافه کنید و **دوباره deploy** کنید
