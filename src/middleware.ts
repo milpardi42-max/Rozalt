@@ -32,6 +32,18 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  /* -------- میان‌بر پنل ادمین: /{locale}/admin → /admin/{locale} -------- */
+  // لینک‌های هدر/فوتر/حساب کاربری به /{locale}/admin اشاره می‌کنند، در حالی که
+  // پنل واقعی بیرون از درخت لایوت فروشگاه است. اینجا با یک ریدایرکت واقعی
+  // (۳۰۷) هدایت می‌کنیم تا هیچ لینکی به ۴۰۴ نخورد. دسترسی پنل همچنان در
+  // بلوک اول همین فایل با نقش admin بررسی می‌شود.
+  const siteAdminMatch = pathname.match(/^\/([^/]+)\/admin(?:\/.*)?$/);
+  if (siteAdminMatch && (LOCALES as string[]).includes(siteAdminMatch[1])) {
+    const adminUrl = req.nextUrl.clone();
+    adminUrl.pathname = `/admin/${siteAdminMatch[1]}`;
+    return NextResponse.redirect(adminUrl);
+  }
+
   /* -------- i18n locale prefix (برای مسیرهای سایت اصلی) -------- */
   const hasLocale = LOCALES.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
   if (!hasLocale) {
