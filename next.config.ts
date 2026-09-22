@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Keep server routes, API handlers, middleware, and authentication in the distributable bundle.
-  output: "standalone",
-  distDir: "dist/.next",
+  // This project is an SSR Next.js app intended for Netlify / Vercel / Node hosts.
+  // Avoid export mode here so route handlers, middleware, and server-side auth work correctly.
   images: {
     // The default candidate list tops out at 3840w, which appends dead weight to every srcset.
     // Nothing on this site renders wider than 2×1920; capping the list trims ~40% off each <img>.
