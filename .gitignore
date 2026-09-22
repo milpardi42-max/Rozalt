@@ -43,3 +43,7 @@ next-env.d.ts
 .Milo/
 .bob/
 .bruno/
+
+# digital commerce private storage (masters, multipart temp, e-mail outbox)
+/data/masters/
+/data/outbox/

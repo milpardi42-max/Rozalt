@@ -31,8 +31,9 @@ import { ErrorState, EmptyState } from "@/components/ui/States";
 import { SESSION_FETCH } from "@/lib/http";
 import { href, formatPrice } from "@/lib/utils";
 import type { Artist, Category, Colorway, Pattern, Product, Space } from "@/lib/types";
+import { ArtistStudio } from "@/components/commerce/ArtistStudio";
 
-type Tab = "patterns" | "products" | "profile" | "stats";
+type Tab = "patterns" | "products" | "profile" | "stats" | "studio";
 
 interface ArtistData {
   patterns: Pattern[];
@@ -103,6 +104,7 @@ export function ArtistDashboard() {
     { id: "patterns", label: fa ? `الگوها (${data?.patterns.length ?? 0})` : `Patterns (${data?.patterns.length ?? 0})`, icon: <BarChart3 className="h-4 w-4" /> },
     { id: "products", label: fa ? `محصولات (${data?.products.length ?? 0})` : `Products (${data?.products.length ?? 0})`, icon: <PackagePlus className="h-4 w-4" /> },
     { id: "profile", label: fa ? "پروفایل" : "Profile", icon: <User className="h-4 w-4" /> },
+    { id: "studio", label: fa ? "استودیو ماستر" : "Master studio", icon: <Upload className="h-4 w-4" /> },
     { id: "stats", label: fa ? "آمار" : "Stats", icon: <TrendingUp className="h-4 w-4" /> },
   ];
 
@@ -215,6 +217,7 @@ export function ArtistDashboard() {
               />
             )}
             {tab === "profile" && <ProfileEditor fa={fa} />}
+            {tab === "studio" && <ArtistStudio />}
             {tab === "stats" && <StatsPanel data={data} fa={fa} locale={locale} />}
           </main>
         </div>

@@ -17,13 +17,18 @@
     "check": "npm run typecheck && npm run lint"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
+    "arabic-persian-reshaper": "^1.0.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.39.0",
     "next": "15.5.25",
+    "pdf-lib": "^1.17.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "server-only": "^0.0.1",
-    "tailwind-merge": "^3.6.0"
+    "sharp": "^0.35.4",
+    "tailwind-merge": "^3.6.0",
+    "wawoff2": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

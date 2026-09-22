@@ -18,6 +18,7 @@ import {
   CalendarClock,
   CreditCard,
   HelpCircle,
+  Download,
 } from "lucide-react";
 import { useAuth, useCart, useFavorites, useLocale } from "@/components/providers/AppProviders";
 import { Button } from "@/components/ui/Button";
@@ -27,6 +28,7 @@ import { SESSION_FETCH } from "@/lib/http";
 import { faNum, formatPrice, href } from "@/lib/utils";
 import type { Order } from "@/lib/data/orders";
 import type { AcademyReservation } from "@/lib/types";
+import { PurchasesPanel } from "@/components/commerce/PurchasesPanel";
 
 export function AccountView() {
   const { user, logout } = useAuth();
@@ -41,7 +43,7 @@ export function AccountView() {
   const [reservations, setReservations] = useState<AcademyReservation[]>([]);
   const [reservationsLoaded, setReservationsLoaded] = useState(false);
   const [remindersEnabled, setRemindersEnabled] = useState(false);
-  const [activeSection, setActiveSection] = useState<"overview" | "reservations" | "orders" | "settings">("overview");
+  const [activeSection, setActiveSection] = useState<"overview" | "reservations" | "orders" | "settings" | "purchases">("overview");
 
   const loadOrders = useCallback(async () => {
     try {
@@ -145,6 +147,7 @@ export function AccountView() {
     { id: "overview" as const, label: fa ? "خلاصه حساب" : "Overview", icon: <User className="h-4 w-4" /> },
     { id: "reservations" as const, label: fa ? "رزروهای من" : "My reservations", icon: <CalendarClock className="h-4 w-4" />, count: reservations.filter((reservation) => reservation.status === "reserved").length },
     { id: "orders" as const, label: fa ? "سفارش‌ها" : "Orders", icon: <Package className="h-4 w-4" />, count: orders.length },
+    { id: "purchases" as const, label: fa ? "خریدهای دیجیتال" : "Digital purchases", icon: <Download className="h-4 w-4" /> },
     { id: "settings" as const, label: fa ? "تنظیمات" : "Settings", icon: <Settings className="h-4 w-4" /> },
   ];
 
@@ -451,6 +454,9 @@ export function AccountView() {
                 </div>
               </div>
             )}
+
+            {/* Digital purchases: signed downloads, certificates, subscriptions */}
+            {activeSection === "purchases" && <PurchasesPanel />}
 
             {/* Settings section */}
             {activeSection === "settings" && (
